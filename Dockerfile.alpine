@@ -1,0 +1,9 @@
+FROM eclipse-temurin:11-jdk-alpine as build
+COPY ./src /opt/workdir
+WORKDIR /opt/workdir
+RUN ./gradlew build
+
+FROM eclipse-temurin:11-jre-alpine
+COPY --from=build /opt/workdir/build/libs/spring-boot-0.0.1-SNAPSHOT.jar /opt/workdir/app.jar
+WORKDIR /opt/workdir
+CMD ["java", "-jar", "./app.jar"]
